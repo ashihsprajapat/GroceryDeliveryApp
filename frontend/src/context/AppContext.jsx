@@ -7,6 +7,7 @@ export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
 
+
     const currency = import.meta.VITE_CURRENCY;
 
     const [cartItems, setCartItems] = useState({});
@@ -15,20 +16,25 @@ export const AppContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [email, setEmail] = useState(null);
     const [showUserLogin, setShowUserLogin] = useState(false);
-    const [product, setProducts] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const [isSeller, setIsSeller] = useState(false);
-    const [searchQuery, setSearchQuery] = useState({});
+    const [searchQuery, setSearchQuery] = useState("");
 
+    const [dashboardCurr, setDashboardCurr] = useState(0);
+
+   // console.log("product in appcontezt", product)
 
     //fetch all products
     const fetchProducts = async () => {
+
         setProducts(dummyProducts);
+       // console.log(product)
     }
 
     //Add product to cart
     const addToCart = (itemId) => {
-        let cartData = structuredClone(cartItems);
+        let cartData = structuredClone(cartItems);  //Using structuredClone() in JavaScript is a way to deep copy an object. When you do this:
         // console.log(cartData)
         if (cartData[itemId]) {
             cartData[itemId] += 1;
@@ -36,8 +42,11 @@ export const AppContextProvider = ({ children }) => {
             cartData[itemId] = 1;
         }
         setCartItems(cartData);
+
         toast.success("Added to cart")
     }
+
+
 
     //update card item quentity 
     const updateCartItem = (itemId, quentity) => {
@@ -46,6 +55,9 @@ export const AppContextProvider = ({ children }) => {
         setCartItems(cartData);
         toast.success("cart updated")
     }
+
+
+
 
     //remove product from cart
     const removeFromCart = (itemId) => {
@@ -62,19 +74,21 @@ export const AppContextProvider = ({ children }) => {
 
     useEffect(() => {
         fetchProducts();
-    }, [])
-    //console.log(product)
+    }, [products])
+    // console.log("all product in app context", product)
 
     let value = {
         navigate,
         user, setUser,
         isSeller, setIsSeller,
         showUserLogin, setShowUserLogin,
-        product, setProducts,
+        products, setProducts,
         currency,
         cartItems, setCartItems,
         addToCart, updateCartItem, removeFromCart,
-        searchQuery, setSearchQuery
+        searchQuery, setSearchQuery,
+        fetchProducts,
+        dashboardCurr, setDashboardCurr
 
     }
 

@@ -4,30 +4,33 @@ import { useAppContext } from '../context/AppContext';
 import ProductCard from './../components/ProductCard';
 
 function AllProducts() {
-    const { product, navigate, searchQuery, setSearchQuery } = useAppContext();
+    const { products, navigate, searchQuery, setSearchQuery } = useAppContext();
     const [filterProduct, setFilterProduct] = useState([]);
+  
 
-    console.log( 'filter data is ',filterProduct)
+   // console.log( 'filter data is ',filterProduct)
 
     useEffect(() => {
 
         if (searchQuery.length > 0) {
-            setFilterProduct(product.filter(product => (
+            setFilterProduct(products.filter(product => (
                 product.name.toLowerCase().includes(searchQuery.toLowerCase())
             )))
         } else {
-            setFilterProduct(product);
+            setFilterProduct(products);
         }
 
 
-    }, [product, searchQuery])
+    }, [products, searchQuery])
+
 
     useEffect(() => {
         if(searchQuery.length >0){
             navigate("/products")
         }
 
-    }, [searchQuery])
+    }, [searchQuery, products])
+
 
 
     return (
@@ -40,7 +43,7 @@ function AllProducts() {
 
             <div className=' grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  lg:grid-cols-5  gap-2 md:gap-8 mt-6' >
                 {
-                    product.filter((product) => product.inStock).map((product, i) => (
+                    filterProduct.filter((product) => product.inStock).map((product, i) => (
 
                         (
                             <ProductCard key={i} product={product} />)

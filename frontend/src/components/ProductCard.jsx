@@ -4,13 +4,15 @@ import { useAppContext } from '../context/AppContext';
 
 export default function ProductCard({ product }) {
     const [count, setCount] = React.useState(0);
+    
 
-    const { currency, cartItems, setCartItems, addToCart, updateCartItem, removeFromCart, } = useAppContext();
+    const { currency, cartItems, setCartItems, navigate, addToCart, updateCartItem, removeFromCart, } = useAppContext();
 
 
 
     return (
-        <div className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white min-w-56 max-w-56 w-full">
+        <div className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white min-w-56 max-w-56 w-full"
+        onClick={()=> navigate(`/products/${product.category.toLowerCase()}/${product._id}`)}>
             <div className="group cursor-pointer flex items-center justify-center px-2">
                 <img className="group-hover:scale-105 transition max-w-26 md:max-w-36" src={product.image[0]} alt={product.name} />
             </div>
@@ -32,10 +34,12 @@ export default function ProductCard({ product }) {
                     </p>
                     <div className="text-green-400" onClick={(e) => e.stopPropagation()} >
                         {!cartItems[product._id] ? (
-                            <button className="flex items-center justify-center gap-1 bg-green-100 border border-green-300 md:w-[80px] w-[64px] h-[34px] rounded text-green-600 font-medium" onClick={() => {
-                                addToCart(product._id);
-                                setCount(1)
-                            }} >
+                            <button className="flex items-center justify-center gap-1 bg-green-100 border border-green-300 md:w-[80px] w-[64px] h-[34px] rounded text-green-600 font-medium"
+                                onClick={() => {
+                                    console.log(product)
+                                    addToCart(product._id);
+                                    setCount(1)
+                                }} >
                                 <img src={assets.cart_icon} alt="" />
                                 Add
                             </button>
@@ -45,7 +49,7 @@ export default function ProductCard({ product }) {
                                     -
                                 </button>
                                 <span className="w-5 text-center">{cartItems[product._id]}</span>
-                                <button onClick={() => addToCart(product._id)} className="cursor-pointer text-md px-2 h-full" >
+                                <button onClick={() => {  addToCart(product._id) }} className="cursor-pointer text-md px-2 h-full" >
                                     +
                                 </button>
                             </div>

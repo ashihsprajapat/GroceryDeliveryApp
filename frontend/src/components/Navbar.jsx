@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { assets } from './../greencart_assets/assets';
 import { useAppContext } from '../context/AppContext';
@@ -13,6 +13,14 @@ function Navbar() {
         navigate("/")
     }
 
+
+    useEffect(() => {
+        if (searchQuery.length > 0) {
+            navigate("/products")
+        }
+
+    }, [searchQuery])
+
     return (
         <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 
@@ -23,12 +31,13 @@ function Navbar() {
 
             {/* Desktop Menu */}
             <div className="hidden sm:flex items-center gap-8">
-                <NavLink to="/contact">Seller Dashboard</NavLink>
+                <NavLink to="/seller">Seller Dashboard</NavLink>
                 <NavLink to="/">Home</NavLink>
-                <NavLink to="/all-products">All Product</NavLink>
+                <NavLink to="/products">All Product</NavLink>
 
                 <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
-                    <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products" onChange={(e)=> setSearchQuery(e.target.value)} />
+                    <input className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" type="text" placeholder="Search products"
+                        onChange={(e) => setSearchQuery(e.target.value)} />
                     <img src={assets.search_icon} className='w-4 h-4' alt="" />
                 </div>
 
@@ -61,7 +70,7 @@ function Navbar() {
             {open &&
                 <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
                     <NavLink onClick={() => setOpen(false)} to="/" className="block">Home</NavLink>
-                    <NavLink onClick={() => setOpen(false)} to="all-product" className="block">All Product</NavLink>
+                    <NavLink onClick={() => setOpen(false)} to="/products" className="block">All Product</NavLink>
 
                     {
                         user &&
