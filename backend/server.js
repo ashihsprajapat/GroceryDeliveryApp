@@ -8,6 +8,11 @@ import cookieParser from 'cookie-parser';
 import { conntectToDb } from './config/Mongodb.js';
 import userRoutes from './routes/user.routes.js'
 import sellerRoutes from './routes/seller.routes.js'
+import connectToCloaudianry from './config/cloudinary.js';
+
+import productRoutes from './routes/product.route.js'
+import cartRoutes from './routes/cart.route.js';
+import addressRoutes from './routes/address.route.js';
 
 dotenv.config();
 
@@ -33,6 +38,9 @@ app.listen(port, () => {
 await conntectToDb()
     .then(() => console.log("Connect to db"))
 
+await connectToCloaudianry()
+    .then(() => console.log("Cloudinary setUp done"))
+
 app.get("/", (req, res) => {
     res.send(" Api is working")
 })
@@ -41,4 +49,10 @@ app.use("/api/user", userRoutes);
 
 
 app.use("/api/seller", sellerRoutes);
+
+app.use("/api/product", productRoutes);
+
+app.use("/api/cart", cartRoutes);
+
+app.use("/api/address", addressRoutes);
 

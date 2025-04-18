@@ -1,7 +1,7 @@
 
-import { tokenGenerator } from "../middleware/tokenGenerate.js";
 import User from "../model/user.model.js";
 import bcrypt from 'bcrypt'
+import { generatorUserToken } from './../utils/tokenGenerate.js';
 
 
 

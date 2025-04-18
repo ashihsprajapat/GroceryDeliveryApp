@@ -1,4 +1,4 @@
-import { generateSellerToken } from "../utils/generateSellerToken.js";
+import { generateSellerToken } from "../utils/tokenGenerate.js";
 
 
 //login seller : /api/seller/login
