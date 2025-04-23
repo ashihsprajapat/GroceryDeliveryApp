@@ -5,10 +5,10 @@ import Product from './../model/product.model.js';
 
 //Add product : api/product/add
 export const addProduct = async (req, res) => {
-
     try {
+        console.log(req.body.productData)
 
-        let productData = JSON.parse(req.body.productData);
+        let productData = req.body.productData
 
         const images = req.files;
 
@@ -20,12 +20,12 @@ export const addProduct = async (req, res) => {
         )
 
         await Product.create({ ...productData, image: imageUrl });
-
-        return res.JSON({ success: true, message: "product added" })
+        console.log("save tp data")
+        return res.json({ success: true, message: "product added" })
 
     } catch (e) {
         console.log(e.message)
-        res.JSON({ success: false, message: e.message })
+        res.json({ success: false, message: e.message })
     }
 }
 
@@ -49,7 +49,7 @@ export const productList = async (req, res) => {
 
 
 //Get single product : api/product/id
-export const prouctById = async (req, res) => {
+export const productById = async (req, res) => {
 
     const { id } = req.params
 

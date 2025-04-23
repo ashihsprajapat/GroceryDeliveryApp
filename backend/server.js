@@ -13,13 +13,14 @@ import connectToCloaudianry from './config/cloudinary.js';
 import productRoutes from './routes/product.route.js'
 import cartRoutes from './routes/cart.route.js';
 import addressRoutes from './routes/address.route.js';
+import orderRoute from './routes/order.routes.js';
 
 dotenv.config();
 
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:8088/"]
+const allowedOrigins = ["http://localhost:5173"]
 
 app.use(express.json())
 app.use(cors({
@@ -55,4 +56,6 @@ app.use("/api/product", productRoutes);
 app.use("/api/cart", cartRoutes);
 
 app.use("/api/address", addressRoutes);
+
+app.use("/api/order", orderRoute);
 

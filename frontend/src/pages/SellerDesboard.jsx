@@ -6,6 +6,7 @@ import OrderList from './OrderList';
 import ProductList from './ProductList';
 import { useAppContext } from '../context/AppContext';
 import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 const SellerDasboard = () => {
 
@@ -27,7 +28,25 @@ const SellerDasboard = () => {
         { name: "Orders", path: "/seller/orders", icon: chaticon },
     ];
 
-    const { dashboardCurr, setDashboardCurr, navigate } = useAppContext();
+    const { dashboardCurr, axios, setDashboardCurr, setIsSeller, navigate } = useAppContext();
+
+    const logout = async () => {
+        try {
+
+            const { data } = await axios.get("/api/seller/logout");
+
+            if (data.success) {
+                toast.success(data.message)
+                setIsSeller(false);
+                navigate("/")
+            }else{
+                toast.error(data.message)
+            }
+
+        } catch (err) {
+            toast.error(err.message)
+        }
+    }
 
     useEffect(() => {
         navigate("/seller/seller")
@@ -41,10 +60,10 @@ const SellerDasboard = () => {
                 </a>
                 <div className="flex items-center gap-5 text-gray-500">
                     <p>Hi! Admin</p>
-                    <button className='border rounded-full text-sm px-4 py-1'>Logout</button>
+                    <button onClick={() => logout()} className='border rounded-full text-sm px-4 py-1'>Logout</button>
                 </div>
             </div>
-            <div  className='w-full  flex flex-row  '>
+            <div className='w-full  flex flex-row  '>
 
 
                 <div className="md:w-64 w-16 border-r h-[550px] text-base border-gray-300 pt-4 flex flex-col transition-all duration-300 ">

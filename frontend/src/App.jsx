@@ -17,11 +17,12 @@ import SellerDasboard from './pages/SellerDesboard'
 import AddProduct from './pages/AddProduct'
 import ProductList from './pages/ProductList'
 import OrderList from './pages/OrderList'
+import SellerLogin from './components/seller/SellerLogin'
 
 
 function App() {
 
-  const { showUserLogin, setShowUserLogin } = useAppContext();
+  const { showUserLogin, setShowUserLogin, isSeller, navigate } = useAppContext();
 
 
   const isSallerpath = useLocation().pathname.includes("seller") //return true and false
@@ -44,11 +45,20 @@ function App() {
           <Route path='/products/:category' element={<ProductCategory />} />
           <Route path='/products/:category/:id' element={<ProductDetails />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/seller' element={<SellerDasboard />} >
-            <Route path='seller' element={<AddProduct/>}/>
-            <Route path='product-list' element={<ProductList/>}/>
-            <Route path='orders' element={<OrderList/>}/>
-          </Route>
+          {
+
+
+            <Route path='/seller' element={isSeller ? <SellerDasboard /> : <SellerLogin />} >
+              !isSeller ? (navigate("/")) :
+              <>
+                <Route path='seller' element={<AddProduct />} />
+                <Route path='product-list' element={<ProductList />} />
+                <Route path='orders' element={<OrderList />} />
+              </>
+            </Route>
+
+          }
+
         </Routes>
         {!isSallerpath && <Footer />}
         <Toaster

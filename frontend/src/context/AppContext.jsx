@@ -1,7 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { dummyProducts } from '../greencart_assets/assets';
 import toast from 'react-hot-toast';
+
+
+
+axios.defaults.baseURL= import.meta.env.VITE_BACKEND_URL
+axios.defaults.withCredentials=true;
 
 export const AppContext = createContext();
 
@@ -57,6 +63,28 @@ export const AppContextProvider = ({ children }) => {
     }
 
 
+    //check seller is authenticate
+
+    const fechtSeller=async()=>{
+        try{
+
+            const {data}= await axios.get("/api/seller/is-seller")
+            console.log(data)
+
+            if(data.success){
+                setIsSeller(true);
+
+            }else{
+                setIsSeller(false)
+            }
+
+        }catch(err){
+            setIsSeller(false)
+        }
+    }
+
+
+
 
 
     //remove product from cart
@@ -74,6 +102,7 @@ export const AppContextProvider = ({ children }) => {
 
     useEffect(() => {
         fetchProducts();
+        fechtSeller()
     }, [products])
     // console.log("all product in app context", product)
 
@@ -88,7 +117,8 @@ export const AppContextProvider = ({ children }) => {
         addToCart, updateCartItem, removeFromCart,
         searchQuery, setSearchQuery,
         fetchProducts,
-        dashboardCurr, setDashboardCurr
+        dashboardCurr, setDashboardCurr,
+        axios
 
     }
 
