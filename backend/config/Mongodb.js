@@ -6,6 +6,7 @@ export const conntectToDb = async () => {
         await mongoose.connect(`${process.env.MONGO_URL}/GroceryApp`)
 
     } catch (e) {
+        console.log("---------------error occur---------------")
         console.log(e)
     }
 }

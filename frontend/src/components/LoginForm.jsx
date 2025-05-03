@@ -1,6 +1,7 @@
 
 import React from "react";
 import { useAppContext } from "../context/AppContext";
+import axios from "axios";
 
 const LoginForm = () => {
     const [state, setState] = React.useState("login");
@@ -13,6 +14,31 @@ const LoginForm = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         console.log(name, email, password);
+
+        try {
+
+            if (state == 'login') {
+                const { data } = await axios.post("/api/user/login", {
+                    email, password
+                })
+                console.log(data);
+                if (data.success) {
+                    setUser(data.user)
+                }
+
+            } else {
+                const { data } = await axios.post("/api/user/register", {
+                    name, email, password
+                })
+                console.log(data);
+                if (data.success) {
+
+                    setUser(data.user)
+                }
+            }
+        } catch (err) {
+            setUser(null)
+        }
         setUser({
             email, name
         })

@@ -65,12 +65,11 @@ export const AppContextProvider = ({ children }) => {
 
     //check seller is authenticate
 
-    const fechtSeller=async()=>{
+    const fetchtSeller=async()=>{
         try{
 
             const {data}= await axios.get("/api/seller/is-seller")
-            console.log(data)
-
+        
             if(data.success){
                 setIsSeller(true);
 
@@ -84,6 +83,24 @@ export const AppContextProvider = ({ children }) => {
     }
 
 
+    //fetch user data 
+    
+    const fetchtUser=async()=>{
+        try{
+
+            const {data}= await axios.post("/api/user/is-auth")
+            
+            if(data.success){
+                setUser(data.user)
+
+            }else{
+                setUser(null)
+            }
+
+        }catch(err){
+            setUser(null)
+        }
+    }
 
 
 
@@ -102,7 +119,8 @@ export const AppContextProvider = ({ children }) => {
 
     useEffect(() => {
         fetchProducts();
-        fechtSeller()
+        fetchtSeller()
+        fetchtUser()
     }, [products])
     // console.log("all product in app context", product)
 

@@ -21,7 +21,7 @@ export const register = async (req, res) => {
         const newUser = new User({ name, email, password: hashPassword });
         await newUser.save();
 
-        const token = tokenGenerator(newUser._id);
+        const token = generatorUserToken(newUser._id);
 
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
@@ -76,9 +76,9 @@ export const login = async (req, res) => {
 export const isAuth = async (req, res) => {
     try {
         const { userId } = req;
-        console.log(userId)
+      //  console.log(userId)
         const user = await User.findById(userId).select('-password')
-        console.log(user)
+       // console.log(user)
         if (!user)
             return res.json({ success: false, message: "Not authorize" })
 

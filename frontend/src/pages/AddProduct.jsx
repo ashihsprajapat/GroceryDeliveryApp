@@ -25,7 +25,8 @@ const AddProduct = () => {
                 description: description.split('\n'),
                 price,
                 offerPrice, category,
-                images
+                images,
+                category
             }
 
             const formData = new FormData();
@@ -38,7 +39,7 @@ const AddProduct = () => {
 
 
             const { data } = await axios.post("/api/product/add",
-                productData
+                formData
             )
             console.log(data)
 
@@ -49,6 +50,7 @@ const AddProduct = () => {
                 setPrice("");
                 setOfferPrice("");
                 setCategory("");
+                
             }
 
         } catch (err) {

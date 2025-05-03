@@ -1,4 +1,31 @@
+import { useEffect, useState } from "react";
+import { useAppContext } from "../context/AppContext";
+
 const ProductList = () => {
+
+    const [allListings, setAllListings]= useState([]);
+
+
+    const {axios , navigate}= useAppContext();
+
+    const  fetchAllListings=async()=>{
+        
+        try{
+
+            const {data}= await axios.get("/api/product/list")
+            console.log(data);
+
+            if(data.success){
+                setAllListings(data.products)
+            }
+        }catch{
+
+        }
+    }
+
+    useEffect(()=>{
+        fetchAllListings()
+    },[])
 
     const products = [
         { name: "Casual Shoes", category: "Shoes", offerPrice: 999, inStock: true, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png", },

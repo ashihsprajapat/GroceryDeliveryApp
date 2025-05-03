@@ -10,7 +10,7 @@ const Router = express.Router();
 
 
 Router.route("/add")
-    .post(authSeller,(req,res, next)=>{console.log("req fils is",req), next()}, upload.array(["images"]), addProduct)
+    .post(authSeller, upload.array(["images"]), addProduct)
 
 Router.route("/list")
     .get(productList)
