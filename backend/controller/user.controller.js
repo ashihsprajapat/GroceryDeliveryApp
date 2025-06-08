@@ -39,14 +39,15 @@ export const register = async (req, res) => {
 }
 
 
-
+// login user function 
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         if (!email || !password)
             return res.json({ success: false, message: "Missing details" })
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email })
+        
         if (!user)
             return res.json({ success: false, message: "Email Not exist" })
 
@@ -54,7 +55,7 @@ export const login = async (req, res) => {
         if (!match)
             return res.json({ success: false, message: "Wrong password " })
 
-        const token = tokenGenerator(user._id);
+        const token = generatorUserToken(user._id);
 
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
@@ -76,9 +77,9 @@ export const login = async (req, res) => {
 export const isAuth = async (req, res) => {
     try {
         const { userId } = req;
-      //  console.log(userId)
+        
         const user = await User.findById(userId).select('-password')
-       // console.log(user)
+        
         if (!user)
             return res.json({ success: false, message: "Not authorize" })
 
