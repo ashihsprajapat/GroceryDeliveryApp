@@ -3,10 +3,13 @@ import { generateSellerToken } from "../utils/tokenGenerate.js";
 
 //login seller : /api/seller/login
 export const sellerLogin = async (req, res) => {
-    const { email, password } = req.body;
+
     try {
-        if(!email || !password)
-            return res.json({ success: false, message: "All Details are required" }) 
+        const { email, password } = req.body;
+
+        if (!email || !password)
+            return res.json({ success: false, message: "All Details are required" })
+
         if (email === process.env.SELLER_EMAIL && password === process.env.SELLER_PASSWORD) {
             const token = generateSellerToken(email);
 

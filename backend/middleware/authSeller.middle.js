@@ -9,7 +9,7 @@ export const authSeller = async (req, res, next) => {
             return res.json({ success: false, message: "not autherize" })
 
         const decode = jwt.verify(seller_token, process.env.JWT_SECRET);
-       // console.log(decode)
+      
 
         if (decode.email === process.env.SELLER_EMAIL) {
             next();
