@@ -1,25 +1,29 @@
 import { upload } from "../config/multer.js";
-import { v2 as cloudinary } from 'cloudinary'
+
 import Product from './../model/product.model.js';
+import cloudinary from './../config/cloudinary.js';
 
 
 //Add product : api/product/add
 export const addProduct = async (req, res) => {
     try {
-        console.log(req.body.productData)
+        console.log("req.boady  =", req.body.productData)
 
         let productData = req.body.productData
 
         const images = req.files;
+        console.log("images are", images)
 
-        let imageUrl = ""
-        // await Promise.all(
-        //     images.map(async (item) => {
-        //         let result = await cloudinary.uploader.upload(item.paht, { resource_type: 'image' })
-        //         return result.secure_url
-        //     })
-        // )
-
+        let imageUrl = []
+        if (images && images.length > 0) {
+            await Promise.all(
+                images.map(async (item) => {
+                    let result = await cloudinary.uploader.upload(item.path, { resource_type: 'image' })
+                    return imageUrl.push(result.secure_url)
+                })
+            )
+        }
+        console.log("image urls arr", imageUrl)
         await Product.create({ ...productData, image: imageUrl });
         console.log("save tp data")
         return res.json({ success: true, message: "product added" })
@@ -38,7 +42,7 @@ export const productList = async (req, res) => {
     try {
 
         const products = await Product.find({})
-        console.log("All Listings are", products)
+
         return res.json({ success: true, products })
 
     } catch (e) {
@@ -52,35 +56,35 @@ export const productList = async (req, res) => {
 //Get single product : api/product/id
 export const productById = async (req, res) => {
 
-    const { id } = req.params
-
     try {
+        const { id } = req.params
 
         const product = await Product.findById(id)
 
-        return res.JSON({ success: true, product })
+        return res.json({ success: true, product })
 
     } catch (e) {
         console.log(e.message)
-        res.JSON({ success: false, message: e.message })
+        res.json({ success: false, message: e.message })
 
     }
 }
 
 
 //chnge stock : api/product/stock
-export const changeStock = async () => {
+export const changeStock = async (req, res) => {
 
     try {
+
         const { id, inStock } = req.body;
 
         await Product.findByIdAndUpdate(id, inStock)
 
-        return res.JSON({ success: true, message: "stack updated" })
+        return res.json({ success: true, message: "stack updated" })
 
     } catch (e) {
         console.log(e.message)
-        res.JSON({ success: false, message: e.message })
+        res.json({ success: false, message: e.message })
 
     }
 }

@@ -22,6 +22,6 @@ Router.route("/:id")
 
     //stock update 
 Router.route("/stock")
-    .post(isSellerAuth, changeStock)
+    .put(authSeller, changeStock)
 
 export default Router
