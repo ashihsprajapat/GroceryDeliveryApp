@@ -7,25 +7,25 @@ import cloudinary from './../config/cloudinary.js';
 //Add product : api/product/add
 export const addProduct = async (req, res) => {
     try {
-        console.log("req.boady  =", req.body.productData)
+        console.log("req.boady  =", req.body)
 
-        let productData = req.body.productData
+        let productData = JSON.parse(req.body.productData)
 
         const images = req.files;
         console.log("images are", images)
 
         let imageUrl = []
         if (images && images.length > 0) {
-            await Promise.all(
-                images.map(async (item) => {
-                    let result = await cloudinary.uploader.upload(item.path, { resource_type: 'image' })
-                    return imageUrl.push(result.secure_url)
-                })
-            )
+            const uploadResults = await Promise.all(
+                images.map((item) => cloudinary.uploader.upload(item.path, {
+                    resource_type: 'image'
+                }))
+            );
+            imageUrl = uploadResults.map(result => result.secure_url);
         }
         console.log("image urls arr", imageUrl)
         await Product.create({ ...productData, image: imageUrl });
-        console.log("save tp data")
+
         return res.json({ success: true, message: "product added" })
 
     } catch (e) {
@@ -78,7 +78,7 @@ export const changeStock = async (req, res) => {
 
         const { id, inStock } = req.body;
 
-        await Product.findByIdAndUpdate(id, inStock)
+        await Product.findByIdAndUpdate(id, { inStock })
 
         return res.json({ success: true, message: "stack updated" })
 

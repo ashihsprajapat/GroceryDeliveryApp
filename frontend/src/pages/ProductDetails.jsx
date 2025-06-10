@@ -3,31 +3,74 @@ import Categories from './../components/Categories';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import ProductCard from './../components/ProductCard';
+import toast from 'react-hot-toast';
 
 function ProductDetails() {
 
-    console.log("product details")
-
-    const product = {
+    const [product, setProduct] = useState({
         name: "Casual Shoes",
         category: "Sports",
         price: 100,
         offerPrice: 80,
         rating: 4,
-        images: [
+        image: [
             "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png",
-            "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage2.png",
-            "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage3.png",
-            "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage4.png"
+            //"https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage2.png",
+            // "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage3.png",
+            // "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage4.png"
         ],
         description: [
             "High-quality material",
             "Comfortable for everyday use",
             "Available in different sizes"
         ]
-    };
+    })
 
-    const [thumbnail, setThumbnail] = React.useState(product.images[0]);
+    const [related, setRelate] = useState([])
+
+    const { id } = useParams();
+
+    const { navigate, axios, products } = useAppContext()
+    console.log("all product are ", products)
+
+    const getDetails = async () => {
+        try {
+            const { data } = await axios.get(`api/product/${id}`)
+            console.log(data)
+            if (data.success) {
+                setProduct(data.product)
+            }
+
+        } catch (e) {
+            console.log(e)
+            toast.error(e.message)
+        }
+    }
+
+    let setThumbnailImage = () => {
+        setThumbnail(product.image[0])
+    }
+
+    useEffect(() => { setThumbnailImage() }, [product])
+
+
+    const [thumbnail, setThumbnail] = useState(product.image[0]);
+
+    useEffect(() => {
+        getDetails(),
+            sameProduct()
+
+    }, [setProduct])
+
+    const sameProduct = () => {
+        console.log("same product function trigger")
+        let findRelatedProduc = products.find((items, _) => items.Categories === product.category)
+        console.log("related products are", findRelatedProduc)
+        setRelate(findRelatedProduc);
+    }
+
+    console.log("related productes are usestate", related)
+
 
     return (
         <div className="max-w-6xl w-full px-6">
@@ -41,7 +84,7 @@ function ProductDetails() {
             <div className="flex flex-col md:flex-row gap-16 mt-4">
                 <div className="flex gap-3">
                     <div className="flex flex-col gap-3">
-                        {product.images.map((image, index) => (
+                        {product.image.map((image, index) => (
                             <div key={index} onClick={() => setThumbnail(image)} className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer" >
                                 <img src={image} alt={`Thumbnail ${index + 1}`} />
                             </div>
@@ -79,9 +122,10 @@ function ProductDetails() {
 
                     <p className="text-base font-medium mt-6">About Product</p>
                     <ul className="list-disc ml-4 text-gray-500/70">
-                        {product.description.map((desc, index) => (
+                        {/* {product.description.map((desc, index) => (
                             <li key={index}>{desc}</li>
-                        ))}
+                        ))} */}
+                        <li>{product.description}</li>
                     </ul>
 
                     <div className="flex items-center mt-10 gap-4 text-base">

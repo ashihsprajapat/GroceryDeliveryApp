@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const ProductList = () => {
 
@@ -17,15 +18,37 @@ const ProductList = () => {
 
             if(data.success){
                 setAllListings(data.products)
+            }else{
+                toast.error(data.message)
             }
-        }catch{
-
+        }catch(e){
+            toast.error(data.message)
         }
     }
+
+
 
     useEffect(()=>{
         fetchAllListings()
     },[])
+
+    const stockChange=async(e, id)=>{
+        console.log(e.target.checked)
+        try{
+            const {data}= await axios.put("/api/product/stock",{id,inStock:e.target.checked})
+
+            console.log(data)
+            if(data.message){
+                toast.success(data.message)
+            }else{
+                toast.error(data.message)
+            }
+
+        }catch(e){
+            toast.error(e.message)
+        }
+
+    }
 
     const products = [
         { name: "Casual Shoes", category: "Shoes", offerPrice: 999, inStock: true, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png", },
@@ -48,11 +71,11 @@ const ProductList = () => {
                             </tr>
                         </thead>
                         <tbody className="text-sm text-gray-500">
-                            {products.map((product, index) => (
+                            {allListings.map((product, index) => (
                                 <tr key={index} className="border-t border-gray-500/20">
                                     <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
                                         <div className="border border-gray-300 rounded p-2">
-                                            <img src={product.image} alt="Product" className="w-16" />
+                                            <img src={product.image[0]} alt="Product" className="w-16" />
                                         </div>
                                         <span className="truncate max-sm:hidden w-full">{product.name}</span>
                                     </td>
@@ -60,7 +83,8 @@ const ProductList = () => {
                                     <td className="px-4 py-3 max-sm:hidden">${product.offerPrice}</td>
                                     <td className="px-4 py-3">
                                         <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
-                                            <input type="checkbox" className="sr-only peer" defaultChecked={product.inStock} />
+                                            <input type="checkbox" className="sr-only peer" defaultChecked={product.inStock} 
+                                            onChange={(e)=> stockChange(e,product._id)} />
                                             <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
                                             <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                                         </label>

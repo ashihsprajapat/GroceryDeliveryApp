@@ -2,6 +2,7 @@
 import React from "react";
 import { useAppContext } from "../context/AppContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
     const [state, setState] = React.useState("login");
@@ -13,7 +14,7 @@ const LoginForm = () => {
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-        console.log(name, email, password);
+        // console.log(name, email, password);
 
         try {
 
@@ -24,6 +25,11 @@ const LoginForm = () => {
                 console.log(data);
                 if (data.success) {
                     setUser(data.user)
+                    toast.success(data.message)
+                    setShowUserLogin(false)
+                } else {
+                    toast.error(data.message)
+                    setPassword("")
                 }
 
             } else {
@@ -34,15 +40,20 @@ const LoginForm = () => {
                 if (data.success) {
 
                     setUser(data.user)
+                    setShowUserLogin(false)
+                    toast.success(data.message)
+                } else {
+                    toast.error(data.message)
+                    setPassword("")
                 }
             }
         } catch (err) {
             setUser(null)
         }
-        setUser({
-            email, name
-        })
-        setShowUserLogin(false)
+        // setUser({
+        //     email, name
+        // })
+        // setShowUserLogin(false)
     }
 
     return (

@@ -6,11 +6,16 @@ import { useAppContext } from '../context/AppContext';
 function Navbar() {
     const [open, setOpen] = React.useState(false)
 
-    const { user, setUser, searchQuery, setSearchQuery, navigate, showUserLogin, setShowUserLogin } = useAppContext();
+    const { axios, user, setUser, searchQuery, setSearchQuery, navigate, showUserLogin, setShowUserLogin } = useAppContext();
 
     const logout = async () => {
-        setUser(null);
-        navigate("/")
+        let { data } = await axios.get("/api/user/logout")
+        console.log(data)
+        if (data.success) {
+            setUser(null);
+            navigate("/")
+        }
+
     }
 
 
@@ -51,11 +56,11 @@ function Navbar() {
                         Login
                     </button>)
                     :
-                    <div className="relative group" >
+                    <div className="relative group cursor-pointer" >
                         <img src={assets.profile_icon} className="w-8" alt="" />
-                        <ul className="hidden group-hover:block absolute top-10 right-0  bg-white shadow border border-gray-200 py-2.5 w-40 rounded-md text-sm z-40" >
+                        <ul className="absolute top-8 right-0 bg-white shadow border border-gray-200 py-2.5 w-40 rounded-md text-sm z-40 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200">
                             <li className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer" onClick={() => naviget("/my-orders")} >My orders</li>
-                            <li className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer" onClick={() => logout()} >Logout</li>
+                            <li className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer" onClick={logout} >Logout</li>
                         </ul>
                     </div>
                 }

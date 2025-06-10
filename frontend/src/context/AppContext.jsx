@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 
 
 
-axios.defaults.baseURL= import.meta.env.VITE_BACKEND_URL
-axios.defaults.withCredentials=true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
+axios.defaults.withCredentials = true;
 
 export const AppContext = createContext();
 
@@ -29,13 +29,27 @@ export const AppContextProvider = ({ children }) => {
 
     const [dashboardCurr, setDashboardCurr] = useState(0);
 
-   // console.log("product in appcontezt", product)
+    // console.log("product in appcontezt", product)
 
     //fetch all products
     const fetchProducts = async () => {
 
-        setProducts(dummyProducts);
-       // console.log(product)
+        try {
+
+            let { data } = await axios.get("/api/product/list")
+        
+            if (data.success) {
+                setProducts(data.products);
+            } else {
+                setProducts(dummyProducts);
+            }
+
+        } catch (e) {
+
+        }
+
+        // 
+        // console.log(product)
     }
 
     //Add product to cart
@@ -65,39 +79,40 @@ export const AppContextProvider = ({ children }) => {
 
     //check seller is authenticate
 
-    const fetchtSeller=async()=>{
-        try{
+    const fetchtSeller = async () => {
+        try {
 
-            const {data}= await axios.get("/api/seller/is-seller")
-        
-            if(data.success){
+            const { data } = await axios.get("/api/seller/is-seller")
+
+
+            if (data.success) {
                 setIsSeller(true);
 
-            }else{
+            } else {
                 setIsSeller(false)
             }
 
-        }catch(err){
+        } catch (err) {
             setIsSeller(false)
         }
     }
 
 
     //fetch user data 
-    
-    const fetchtUser=async()=>{
-        try{
 
-            const {data}= await axios.post("/api/user/is-auth")
-            
-            if(data.success){
+    const fetchtUser = async () => {
+        try {
+
+            const { data } = await axios.post("/api/user/is-auth")
+
+            if (data.success) {
                 setUser(data.user)
 
-            }else{
+            } else {
                 setUser(null)
             }
 
-        }catch(err){
+        } catch (err) {
             setUser(null)
         }
     }
@@ -119,6 +134,9 @@ export const AppContextProvider = ({ children }) => {
 
     useEffect(() => {
         fetchProducts();
+    }, [])
+    useEffect(() => {
+
         fetchtSeller()
         fetchtUser()
     }, [products])

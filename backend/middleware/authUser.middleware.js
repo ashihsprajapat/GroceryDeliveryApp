@@ -12,12 +12,17 @@ export const authUser = async (req, res, next) => {
 
         const decode = jwt.verify(grocery_token, process.env.JWT_SECRET);
 
-        if (!decode.id) {
+        const userId = decode.id
+
+        let user = await User.findById(userId).select("-password")
+
+        if (!decode.id || !user) {
             return res.json({ success: false, message: "not Authorize" })
         }
 
 
         req.userId = decode.id;
+        req.user =user
 
         next();
 

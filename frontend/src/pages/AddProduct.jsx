@@ -2,6 +2,7 @@ import { useState } from "react";
 import { categories } from "../greencart_assets/assets";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import { fromJSON } from "postcss";
 
 const AddProduct = () => {
 
@@ -22,10 +23,9 @@ const AddProduct = () => {
 
             const productData = {
                 name,
-                description: description.split('\n'),
+                description, //: description.split('\n')
                 price,
-                offerPrice, category,
-                images,
+                offerPrice,
                 category
             }
 
@@ -34,12 +34,14 @@ const AddProduct = () => {
 
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                formData.append('images', files[i])
+                formData.append('images', file)
             }
 
 
             const { data } = await axios.post("/api/product/add",
-                formData
+                formData,
+
+
             )
             console.log(data)
 
@@ -50,7 +52,10 @@ const AddProduct = () => {
                 setPrice("");
                 setOfferPrice("");
                 setCategory("");
-                
+                setFiles([]);
+
+            } else {
+                toast.error(data.message)
             }
 
         } catch (err) {
@@ -68,7 +73,7 @@ const AddProduct = () => {
                         {Array(4).fill('').map((_, index) => (
 
                             files[index] ?
-                                (<img src={URL.createObjectURL(files[index].fil)} alt="files" className="max-w-24 cursor-pointer" />
+                                (<img src={URL.createObjectURL(files[index])} alt="files" className="max-w-24 cursor-pointer" />
 
                                 )
                                 :
@@ -76,10 +81,10 @@ const AddProduct = () => {
                                 <label key={index} htmlFor={`image${index}`}>
                                     <input accept="image/*" type="file" id={`image${index}`} hidden
                                         onChange={(e) => {
-
-                                            return setFiles((prev) => (
-                                                [...prev, { fil: e.target.files[0] }]
-                                            ))
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setFiles((prev) => [...prev, file]);
+                                            }
                                         }} />
                                     <img className="max-w-24 cursor-pointer" src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/uploadArea.png" alt="uploadArea" width={100} height={100} />
                                 </label>

@@ -9,7 +9,7 @@ const productSchema = new Schema({
     offerPrice: { type: Number, required: true },
     image: { type: Array, required: true },
     category: { type: String, required: true },
-    inStack: { type: Boolean, default: true },
+    inStock: { type: Boolean, default: true },
 }, { timestamps: true })
 
 

@@ -17,14 +17,23 @@ const Cart = () => {
     const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0])
     const [paymentOption, setPaymentOption] = useState("COD");
 
+    const product = [
+        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png", category: "Footwear", },
+        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage2.png", category: "Footwear", },
+        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage3.png", category: "Footwear", },
+    ]
+
 
     const getCart = () => {
         let tempArray = [];
-        for (const key in products) {
-            const product = product.find((items, i) => items._id === key)
-
-            product.quantity = cartItems[key];
-            tempArray.push(product)
+        console.log("products are ", products)
+        for (const key of products) {
+            console.log("key are", key)
+            const matchedProduct = product.find((items, i) => items._id === key._id)
+            if (!matchedProduct) continue;
+            console.log("product are ", product)
+            matchedProduct.quantity = cartItems[key];
+            tempArray.push(matchedProduct);
         }
         setCartArray(tempArray);
         console.log("temp array is", tempArray);
@@ -34,17 +43,14 @@ const Cart = () => {
     const getCartCount = () => { return 8 }
 
 
+
     useEffect(() => {
         if (products.length > 0 && cartItems) {
             getCart();
         }
-    }, [product, cartItems])
+    }, [products, cartItems])
 
-    const product = [
-        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png", category: "Footwear", },
-        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage2.png", category: "Footwear", },
-        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage3.png", category: "Footwear", },
-    ]
+
     return product.length > 0 && cartItems ? (
         <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
             <div className='flex-1 max-w-4xl'>
