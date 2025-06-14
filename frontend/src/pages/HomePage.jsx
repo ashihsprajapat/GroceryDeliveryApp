@@ -1,10 +1,10 @@
 
 import React from 'react'
-import MainBanner from '../components/mainBanner'
 import Categories from '../components/Categories'
 import BestSeller from '../components/BestSeller'
 import BottomBanner from '../components/BottomBanner'
 import EmailSubscription from '../components/EmailSubscription'
+import MainBanner from '../components/MainBanner'
 
 
 function HomePage() {
