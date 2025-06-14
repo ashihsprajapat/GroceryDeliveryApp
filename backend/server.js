@@ -37,13 +37,12 @@ app.use(cors({
 app.use(cookieParser())
 
 
-if (process.env.MODE_DEV !== "production") {
     const port = process.env.PORT || 4000;
 
     app.listen(port, () => {
         console.log("App is listing on port", port)
     })
-}
+
 await conntectToDb()
     .then(() => console.log("Connect to db"))
 
