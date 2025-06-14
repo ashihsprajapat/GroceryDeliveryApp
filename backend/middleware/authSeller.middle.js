@@ -4,8 +4,9 @@ import jwt from 'jsonwebtoken';
 
 export const authSeller = async (req, res, next) => {
     try {
+        console.log("req comme here")
         const { seller_token } = req.cookies;
-       
+
 
         if (!seller_token)
             return res.json({ success: false, message: "not autherize" })
