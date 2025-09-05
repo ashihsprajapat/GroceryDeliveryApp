@@ -22,7 +22,7 @@ export const authUser = async (req, res, next) => {
 
 
         req.userId = decode.id;
-        req.user =user
+        req.user = user
 
         next();
 

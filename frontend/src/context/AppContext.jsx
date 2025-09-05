@@ -16,7 +16,10 @@ export const AppContextProvider = ({ children }) => {
 
     const currency = import.meta.VITE_CURRENCY;
 
-    const [cartItems, setCartItems] = useState({});
+    const [cartItems, setCartItems] = useState({
+        // "6847c0db325e42a6a078b7a3": 1,
+        // "6847c186325e42a6a078b7bb": 1
+    });
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -29,6 +32,9 @@ export const AppContextProvider = ({ children }) => {
 
     const [dashboardCurr, setDashboardCurr] = useState(0);
 
+    const [address, setAddress] = useState({})
+    const [loadingAddress, setLoadingAddress] = useState();
+
     // console.log("product in appcontezt", product)
 
     //fetch all products
@@ -37,7 +43,7 @@ export const AppContextProvider = ({ children }) => {
         try {
 
             let { data } = await axios.get("/api/product/list")
-        
+
             if (data.success) {
                 setProducts(data.products);
             } else {
@@ -107,6 +113,7 @@ export const AppContextProvider = ({ children }) => {
 
             if (data.success) {
                 setUser(data.user)
+                setCartItems(data.user.cartItems)
 
             } else {
                 setUser(null)
@@ -116,6 +123,7 @@ export const AppContextProvider = ({ children }) => {
             setUser(null)
         }
     }
+
 
 
 
@@ -132,15 +140,80 @@ export const AppContextProvider = ({ children }) => {
         setCartItems(cartData);
     }
 
+  
+
+    //post a address for user
+    const addAddress = async (address) => {
+        try {
+
+            const { data } = await axios.post("/api/address/add-address", { address })
+            console.log("data of adding address ", data)
+            if (data.success) {
+                setAddress(data.address)
+                toast.success(data.message)
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+
+    //add orders post request
+    const orderPlace = async (order) => {
+        try {
+
+            const { data } = await axios.post("/api/order/COD", { order })
+            console.log("response of order placeing ", data)
+            if (data.success) {
+                toast.success("Order place successfull")
+                navigate("/my-orders")
+            } else {
+                toast.error(data.message)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         fetchProducts();
     }, [])
+
     useEffect(() => {
 
         fetchtSeller()
         fetchtUser()
     }, [products])
     // console.log("all product in app context", product)
+
+
+    //update database cartItmes
+    useEffect(() => {
+
+        const updateCart = async () => {
+            console.log("update cart item in database")
+            try {
+
+                const { data } = await axios.post("/api/cart/update", { cartItems })
+
+                if (!data.success) {
+                    toast.error(data.message)
+                }
+
+            } catch (err) {
+                toast.error(err.message)
+            }
+        }
+        if (user) {
+            updateCart()
+        }
+
+    }, [cartItems])
+
+    console.log("cart Items are ", cartItems)
 
     let value = {
         navigate,
@@ -153,8 +226,12 @@ export const AppContextProvider = ({ children }) => {
         addToCart, updateCartItem, removeFromCart,
         searchQuery, setSearchQuery,
         fetchProducts,
+        address, setAddress,
+        addAddress,
         dashboardCurr, setDashboardCurr,
-        axios
+        axios,
+        orderPlace,
+        loadingAddress, setLoadingAddress
 
     }
 

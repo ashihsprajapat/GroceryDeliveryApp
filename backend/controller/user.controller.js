@@ -25,8 +25,8 @@ export const register = async (req, res) => {
 
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
-            secure: process.env.NODE_ENV === "developement",  // use secire cookie in production
-            sameSite: process.env.NODE_ENV === "developement" ? 'none' : "stict",  //secur   CSRF protextion
+            secure: process.env.MODE_DEV === "developement",  // use secire cookie in production
+            sameSite: process.env.MODE_DEV === "developement" ? 'none' : "stict",  //secur   CSRF protextion
             maxAge: 7 * 24 * 60 * 60 * 1000, //mili second cookie expiration time
         })
 
@@ -59,8 +59,8 @@ export const login = async (req, res) => {
 
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
-            secure: process.env.NODE_ENV === "developement",  // use secire cookie in production
-            sameSite: process.env.NODE_ENV === "developement" ? 'none' : "stict",  //secur   CSRF protextion
+            secure: process.env.MODE_DEV === "developement",  // use secire cookie in production
+            sameSite: process.env.MODE_DEV === "developement" ? 'none' : "stict",  //secur   CSRF protextion
             maxAge: 7 * 24 * 60 * 60 * 1000, //mili second cookie expiration time
         })
 
@@ -99,7 +99,7 @@ export const logout = async (req, res) => {
 
             httpOnly: true,
             secure: process.env.NODE_ENV === "developement",
-            sameSite: process.env.NODE_ENV === "developement" ? 'none' : "stict",
+            sameSite: process.env.NODE_ENV === "developement" ? 'none' : "strict",
         })
 
         return res.json({ success: true, message: "logout success full" })

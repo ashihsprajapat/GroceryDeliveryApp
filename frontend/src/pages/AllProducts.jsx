@@ -6,9 +6,9 @@ import ProductCard from './../components/ProductCard';
 function AllProducts() {
     const { products, navigate, searchQuery, setSearchQuery } = useAppContext();
     const [filterProduct, setFilterProduct] = useState([]);
-  
 
-   // console.log( 'filter data is ',filterProduct)
+
+    // console.log( 'filter data is ',filterProduct)
 
     useEffect(() => {
 
@@ -25,7 +25,7 @@ function AllProducts() {
 
 
     useEffect(() => {
-        if(searchQuery.length >0){
+        if (searchQuery.length > 0) {
             navigate("/products")
         }
 
@@ -41,7 +41,7 @@ function AllProducts() {
             </div>
 
 
-            <div className=' grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  lg:grid-cols-5  gap-2 md:gap-8 mt-6' >
+            <div className=' grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 items-center justify-center lg:grid-cols-4  gap-2 md:gap-8 mt-6' >
                 {
                     filterProduct.filter((product) => product.inStock).map((product, i) => (
 

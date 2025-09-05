@@ -7,8 +7,6 @@ import { AppContextProvider } from './context/AppContext.jsx'
 import Navbar from './components/Navbar.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-
     <BrowserRouter>
 
       <AppContextProvider>
@@ -16,5 +14,4 @@ createRoot(document.getElementById('root')).render(
         <App />
       </AppContextProvider>
     </BrowserRouter>
-  </StrictMode>,
 )

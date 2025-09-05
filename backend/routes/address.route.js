@@ -5,11 +5,11 @@ import { addAddress, getAddress } from '../controller/address.controller.js';
 const addressRoutes = express.Router();
 
 
-addressRoutes.route("/add")
+addressRoutes.route("/add-address")
     .post(authUser, addAddress)
 
 
-addressRoutes.route("/get")
+addressRoutes.route("/get-address")
     .get(authUser, getAddress)
 
 

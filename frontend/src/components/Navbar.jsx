@@ -6,7 +6,7 @@ import { useAppContext } from '../context/AppContext';
 function Navbar() {
     const [open, setOpen] = React.useState(false)
 
-    const { axios, user, setUser, searchQuery, setSearchQuery, navigate, showUserLogin, setShowUserLogin } = useAppContext();
+    const { axios,cartItems, user, setUser, searchQuery, setSearchQuery, navigate, showUserLogin, setShowUserLogin } = useAppContext();
 
     const logout = async () => {
         let { data } = await axios.get("/api/user/logout")
@@ -48,7 +48,11 @@ function Navbar() {
 
                 <div className="relative cursor-pointer" onClick={() => navigate("/cart")} >
                     <img src={assets.cart_icon} className='w-6 opacity-80' alt="" />
-                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-500 w-[18px] h-[18px] rounded-full">3</button>
+                    <button className="absolute -top-2 -right-3 text-xs text-white bg-green-500 w-[18px] h-[18px] rounded-full">
+                        {
+                            Object.keys(cartItems).length
+                        }
+                    </button>
                 </div>
                 {!user ? (
                     <button className="cursor-pointer px-8 py-2 bg-green-500   hover:bg-green-400 transition text-white rounded-full"
@@ -59,7 +63,7 @@ function Navbar() {
                     <div className="relative group cursor-pointer" >
                         <img src={assets.profile_icon} className="w-8" alt="" />
                         <ul className="absolute top-8 right-0 bg-white shadow border border-gray-200 py-2.5 w-40 rounded-md text-sm z-40 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-200">
-                            <li className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer" onClick={() => naviget("/my-orders")} >My orders</li>
+                            <li className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer" onClick={() => navigate("/my-orders")} >My orders</li>
                             <li className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer" onClick={logout} >Logout</li>
                         </ul>
                     </div>

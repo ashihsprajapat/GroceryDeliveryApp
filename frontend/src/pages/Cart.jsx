@@ -5,43 +5,105 @@ import { dummyAddress } from "../greencart_assets/assets";
 
 const Cart = () => {
 
-    const { products, currency, navigate, cartItems, removeFromCart,
-        updateCartItem, navigatae,
+    const { products, currency, navigate, cartItems, setCartItems, removeFromCart,
+        updateCartItem, navigatae, orderPlace, user,
+        axios,
+        loadingAddress, setLoadingAddress
     } = useAppContext();
 
-    console.log("product in cart", products)
 
     const [cartArray, setCartArray] = useState([]);
-    const [addresses, setAddresses] = useState(dummyAddress);
+    const [addresses, setAddresses] = useState([]);
     const [showAddress, setShowAddress] = useState(false)
     const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0])
     const [paymentOption, setPaymentOption] = useState("COD");
 
-    const product = [
-        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png", category: "Footwear", },
-        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage2.png", category: "Footwear", },
-        { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage3.png", category: "Footwear", },
-    ]
+
+
+    const [paymentType, setPaymentType] = useState("COD")
+    const [isPaid, setIsPaid] = useState(false);
+    const [amount, setAmount] = useState(0);
+    const [accualAmount, setAccualAmount] = useState(0);
+
+    // const product = [
+    //     { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage.png", category: "Footwear", },
+    //     { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage2.png", category: "Footwear", },
+    //     { name: "Running Shoes", description: ["Lightweight and comfortable", "Breathable mesh upper", "Ideal for jogging and casual wear"], offerPrice: 250, price: 200, quantity: 1, size: 42, image: "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/card/productImage3.png", category: "Footwear", },
+    // ]
+
+
+    useEffect(() => {
+        const getUserAddress = async () => {
+            try {
+                setLoadingAddress(true)
+                const { data } = await axios.get("/api/address/get-address")
+                console.log("data of address of user", data)
+                if (data.success) {
+                    setAddresses(data.address)
+                    if (data.address.length > 1) {
+                        setSelectedAddress(data.address[0])
+                    }
+                }
+                setLoadingAddress(false)
+            } catch (err) {
+                console.log(err.message)
+            }
+        }
+        if (user) {
+            console.log("call to get address")
+            //get the user address
+
+            getUserAddress()
+        }
+    }, [user])
 
 
     const getCart = () => {
+        // console.log("trigger to getCart")
         let tempArray = [];
-        console.log("products are ", products)
         for (const key of products) {
-            console.log("key are", key)
-            const matchedProduct = product.find((items, i) => items._id === key._id)
-            if (!matchedProduct) continue;
-            console.log("product are ", product)
-            matchedProduct.quantity = cartItems[key];
-            tempArray.push(matchedProduct);
+            //  const matchedProduct = product.find((items, i) => items._id === key._id)
+            // if (!matchedProduct) continue;
+
+            // console.log("product are ", product)
+            // matchedProduct.quantity = cartItems[key];
+            // tempArray.push(matchedProduct);
+
+            if (!Object.prototype.hasOwnProperty.call(cartItems, key._id))
+                continue;
+            tempArray.push(key);
         }
         setCartArray(tempArray);
-        console.log("temp array is", tempArray);
+        // console.log("temp array is", tempArray);
     }
 
 
     const getCartCount = () => { return 8 }
 
+    const removeItmeFromCart = (productId) => {
+        console.log("remove from cart trigger")
+        let cartDate = structuredClone(cartItems)
+
+        delete cartDate[productId]
+        setCartItems(cartDate);
+    }
+
+    //calculate total amount and 
+    const calculateAmount = () => {
+        let totalAmount = 0;
+        let toatlaccual = 0;
+        cartArray.forEach((product) => {
+            toatlaccual += product.price * cartItems[product._id]
+            return totalAmount += product.offerPrice * cartItems[product._id]
+
+        })
+        setAmount(totalAmount);
+        setAccualAmount(toatlaccual)
+    }
+
+    useEffect(() => {
+        calculateAmount()
+    }, [setCartArray, cartItems, setCartItems, removeItmeFromCart])
 
 
     useEffect(() => {
@@ -51,7 +113,7 @@ const Cart = () => {
     }, [products, cartItems])
 
 
-    return product.length > 0 && cartItems ? (
+    return products.length > 0 && cartItems ? (
         <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
             <div className='flex-1 max-w-4xl'>
                 <h1 className="text-3xl font-medium mb-6">
@@ -83,8 +145,11 @@ const Cart = () => {
                                     <p>Weight: <span>{product.weight || "N/A"}</span></p>
                                     <div className='flex items-center'>
                                         <p>Qty:</p>
-                                        <select className='outline-none'>
-                                            {Array(cartItems[product._id > 9 ? cartItems[product._id] : 9]).fill('').map((_, index) => (
+                                        <select className='outline-none'
+                                            value={cartItems[product._id]}
+                                            onChange={(e) => setCartItems({ ...cartItems, [product._id]: e.target.value })}
+                                        >
+                                            {Array(cartItems[product._id] > 9 ? cartItems[product._id] : 9).fill('').map((_, index) => (
                                                 <option key={index} value={index + 1}>{index + 1}</option>
                                             ))}
                                         </select>
@@ -92,8 +157,10 @@ const Cart = () => {
                                 </div>
                             </div>
                         </div>
-                        <p className="text-center">${product.offerPrice * product.quantity}</p>
-                        <button className="cursor-pointer mx-auto">
+                        <p className="text-center">${product.offerPrice * cartItems[product._id]}</p>
+                        <button className="cursor-pointer mx-auto"
+                            onClick={() => removeItmeFromCart(product._id)}>
+
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="m12.5 7.5-5 5m0-5 5 5m5.833-2.5a8.333 8.333 0 1 1-16.667 0 8.333 8.333 0 0 1 16.667 0" stroke="#FF532E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -117,27 +184,78 @@ const Cart = () => {
                 <div className="mb-6">
                     <p className="text-sm font-medium uppercase">Delivery Address</p>
                     <div className="relative flex justify-between items-start mt-2">
-                        <p className="text-gray-500">No address found</p>
-                        <button onClick={() => setShowAddress(!showAddress)} className="text-indigo-500 hover:underline cursor-pointer">
-                            Change
-                        </button>
-                        {showAddress && (
-                            <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
-                                <p onClick={() => setShowAddress(false)} className="text-gray-500 p-2 hover:bg-gray-100">
-                                    New York, USA
-                                </p>
-                                <p onClick={() => setShowAddress(false)} className="text-indigo-500 text-center cursor-pointer p-2 hover:bg-indigo-500/10">
-                                    Add address
-                                </p>
-                            </div>
-                        )}
+                        {
+                            loadingAddress ? (
+                                <div className="flex items-center justify-center w-full h-24 bg-gray-50 rounded-md border border-gray-200">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                                        <p className="text-gray-600">Loading address details...</p>
+                                    </div>
+                                </div>
+                            ) :
+
+                                (
+                                    <div className="flex flex-col">
+                                        <div className="flex flex-col space-y-2 text-sm md:text-base">
+
+                                            <div className="flex gap-2 flex-wrap">
+                                                <span>{selectedAddress.street},</span>
+                                                <span>{selectedAddress.city},</span>
+                                                <span>{selectedAddress.state},</span>
+                                                <span>{selectedAddress.country},</span>
+                                                <span>{selectedAddress.zipcode}</span>
+                                            </div>
+                                        </div>
+
+
+
+                                        <button onClick={() => setShowAddress(!showAddress)} className="text-indigo-500 hover:underline cursor-pointer">
+                                            Change
+                                        </button>
+                                        {showAddress && (
+                                            <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
+                                                <p onClick={() => setShowAddress(false)} className="text-gray-500 p-2 hover:bg-gray-100">
+                                                    {addresses.length > 0 ? (
+                                                        <>
+
+                                                            {
+                                                                addresses.map((address, i) => (
+                                                                    <div className="flex flex-col space-y-2 text-sm md:text-base cursor-pointer hove:bg-gray-900"
+                                                                    onClick={()=> setSelectedAddress(address)}>
+
+                                                                        <div className="flex gap-2 flex-wrap">
+                                                                            <span>{address.street},</span>
+                                                                            <span>{address.city},</span>
+                                                                            <span>{address.state},</span>
+                                                                            <span>{address.country},</span>
+                                                                            <span>{address.zipcode}</span>
+                                                                        </div>
+                                                                        <hr />
+                                                                    </div>
+                                                                ))}
+                                                        </>
+
+                                                    ) : "New York, USA"}
+                                                </p>
+                                                <p onClick={() => {
+                                                    setShowAddress(false)
+                                                    navigate("/add-address")
+                                                }} className="text-indigo-500 text-center cursor-pointer p-2 hover:bg-indigo-500/10">
+                                                    Add address
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )
+                        }
+
                     </div>
 
                     <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
 
                     <select className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
-                        <option value="COD">Cash On Delivery</option>
-                        <option value="Online">Online Payment</option>
+                        <option value="COD" onClick={() => setPaymentType("COD")}>Cash On Delivery</option>
+                        <option value="Online" onClick={() => setPaymentType("Online")}>Online Payment</option>
                     </select>
                 </div>
 
@@ -145,7 +263,7 @@ const Cart = () => {
 
                 <div className="text-gray-500 mt-4 space-y-2">
                     <p className="flex justify-between">
-                        <span>Price</span><span>$20</span>
+                        <span>Price</span><span>${accualAmount}</span>
                     </p>
                     <p className="flex justify-between">
                         <span>Shipping Fee</span><span className="text-green-600">Free</span>
@@ -154,7 +272,7 @@ const Cart = () => {
                         <span>Tax (2%)</span><span>$20</span>
                     </p>
                     <p className="flex justify-between text-lg font-medium mt-3">
-                        <span>Total Amount:</span><span>$20</span>
+                        <span>Total Amount:</span><span>${amount}</span>
                     </p>
                 </div>
 

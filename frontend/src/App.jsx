@@ -18,6 +18,7 @@ import AddProduct from './pages/AddProduct'
 import ProductList from './pages/ProductList'
 import OrderList from './pages/OrderList'
 import SellerLogin from './components/seller/SellerLogin'
+import AddAddress from './pages/AddAddress'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <Route path='/products/:category' element={<ProductCategory />} />
           <Route path='/products/:category/:id' element={<ProductDetails />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/add-address' element={<AddAddress />} />
           {
 
 

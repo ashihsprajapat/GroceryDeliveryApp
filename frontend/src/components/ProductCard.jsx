@@ -36,7 +36,7 @@ export default function ProductCard({ product }) {
                         {!cartItems[product._id] ? (
                             <button className="flex items-center justify-center gap-1 bg-green-100 border border-green-300 md:w-[80px] w-[64px] h-[34px] rounded text-green-600 font-medium"
                                 onClick={() => {
-                                    console.log(product)
+                                    console.log("product detils and add to cart",product)
                                     addToCart(product._id);
                                     setCount(1)
                                 }} >
@@ -45,7 +45,8 @@ export default function ProductCard({ product }) {
                             </button>
                         ) : (
                             <div className="flex items-center justify-center gap-2 md:w-20 w-16 h-[34px] bg-green-500/25 rounded select-none cursor-pointer">
-                                <button onClick={() => removeFromCart(product._id)} className="cursor-pointer text-md px-2 h-full" >
+                                <button onClick={() =>{ removeFromCart(product._id);
+                                }} className="cursor-pointer text-md px-2 h-full" >
                                     -
                                 </button>
                                 <span className="w-5 text-center">{cartItems[product._id]}</span>

@@ -40,7 +40,7 @@ export const productList = async (req, res) => {
 
 
     try {
-
+       // console.log("req come for product list")
         const products = await Product.find({})
 
         return res.json({ success: true, products })

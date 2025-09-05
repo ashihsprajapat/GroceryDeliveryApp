@@ -27,7 +27,9 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = ["https://grocery-delivery-app-frontend.vercel.app"]
+
+
+const allowedOrigins = [ "http://localhost:5173",process.env.ALLOWEDORIGIN]
 
 app.use(express.json())
 app.use(cors({

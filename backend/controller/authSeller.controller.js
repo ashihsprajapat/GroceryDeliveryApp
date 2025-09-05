@@ -3,6 +3,7 @@ import { generateSellerToken } from "../utils/tokenGenerate.js";
 
 //login seller : /api/seller/login
 export const sellerLogin = async (req, res) => {
+    //console.log("req for seller login")
 
     try {
         const { email, password } = req.body;
@@ -15,10 +16,10 @@ export const sellerLogin = async (req, res) => {
 
             res.cookie("seller_token", token, {
                 httpOnly: true,
-                secure: process.env.MODE_DEV === "developement",
-                sameSite: process.env.MODE_DEV === "developement" ? 'none' : "stict",
+                secure: process.env.MODE_DEV === "production",   // Only secure in production
+                sameSite: process.env.MODE_DEV === "production" ? 'none' : 'lax',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
+            });
 
             return res.json({ success: true, message: " Seller login Success" })
         } else {
@@ -52,7 +53,7 @@ export const sellerLogout = async (req, res) => {
 
             httpOnly: true,
             secure: process.env.NODE_ENV === "developement",
-            sameSite: process.env.NODE_ENV === "developement" ? 'none' : "stict",
+            sameSite: process.env.NODE_ENV === "developement" ? 'none' : "strict",
         })
 
         return res.json({ success: true, message: " Seller logout success " })
