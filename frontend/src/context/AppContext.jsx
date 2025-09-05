@@ -140,7 +140,7 @@ export const AppContextProvider = ({ children }) => {
         setCartItems(cartData);
     }
 
-  
+
 
     //post a address for user
     const addAddress = async (address) => {
@@ -161,22 +161,7 @@ export const AppContextProvider = ({ children }) => {
 
     }
 
-    //add orders post request
-    const orderPlace = async (order) => {
-        try {
 
-            const { data } = await axios.post("/api/order/COD", { order })
-            console.log("response of order placeing ", data)
-            if (data.success) {
-                toast.success("Order place successfull")
-                navigate("/my-orders")
-            } else {
-                toast.error(data.message)
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
 
     useEffect(() => {
         fetchProducts();
@@ -194,14 +179,14 @@ export const AppContextProvider = ({ children }) => {
     useEffect(() => {
 
         const updateCart = async () => {
-            console.log("update cart item in database")
+            // console.log("update cart item in database")
             try {
 
                 const { data } = await axios.post("/api/cart/update", { cartItems })
 
-                if (!data.success) {
-                    toast.error(data.message)
-                }
+                // if (!data.success) {
+                //     toast.error(data.message)
+                // }
 
             } catch (err) {
                 toast.error(err.message)
@@ -230,7 +215,6 @@ export const AppContextProvider = ({ children }) => {
         addAddress,
         dashboardCurr, setDashboardCurr,
         axios,
-        orderPlace,
         loadingAddress, setLoadingAddress
 
     }

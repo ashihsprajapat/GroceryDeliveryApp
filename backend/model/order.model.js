@@ -13,9 +13,10 @@ const orderSchema = new Schema({
     address: { type: String, required: true, ref: 'Address' },
     status: { type: String, required: true, default: "Order Placed" },
     paymentType: { type: String, required: true },
-    isPaid: { type: Boolean,required: true, default: false },
+    isPaid: { type: Boolean, required: true, default: false },
+    date: { type: Date, default: Date.now() }
 
-},{timestamps:true})
+}, { timestamps: true })
 
 const Order = model.Order || model("Order", orderSchema)
 

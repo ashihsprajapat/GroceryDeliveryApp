@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react"
 import { useAppContext } from "../context/AppContext"
 import { dummyAddress } from "../greencart_assets/assets";
+import toast from "react-hot-toast";
 
 const Cart = () => {
 
     const { products, currency, navigate, cartItems, setCartItems, removeFromCart,
-        updateCartItem, navigatae, orderPlace, user,
+        updateCartItem, navigatae, user,
         axios,
         loadingAddress, setLoadingAddress
     } = useAppContext();
@@ -37,7 +38,7 @@ const Cart = () => {
             try {
                 setLoadingAddress(true)
                 const { data } = await axios.get("/api/address/get-address")
-                console.log("data of address of user", data)
+                //  console.log("data of address of user", data)
                 if (data.success) {
                     setAddresses(data.address)
                     if (data.address.length > 1) {
@@ -50,9 +51,7 @@ const Cart = () => {
             }
         }
         if (user) {
-            console.log("call to get address")
             //get the user address
-
             getUserAddress()
         }
     }, [user])
@@ -100,6 +99,70 @@ const Cart = () => {
         setAmount(totalAmount);
         setAccualAmount(toatlaccual)
     }
+
+    console.log("payment type is ", paymentType)
+
+    //order place on cod
+    //add orders post request
+    const orderPlace = async (order) => {
+        try {
+
+            if (paymentType === 'COD') {
+                console.log("order place with cod")
+                const { data } = await axios.post("/api/order/COD", {
+                    userId: user._id,
+                    amount,
+                    address: selectedAddress._id,
+                    paymentType,
+                    items: cartArray.map((item) => (
+                        {
+                            product: item._id,
+                            quantity: cartItems[item._id],
+                        }
+                    ))
+                })
+                console.log("response of order placeing ", data)
+                if (data.success) {
+                    toast.success(data.message)
+                    setCartItems({})
+                    navigate("/my-orders")
+                } else {
+                    toast.error(data.message)
+                }
+            } else {
+                console.log("order place with stripe")
+                const { data } = await axios.post("/api/order/stripe", {
+                    userId: user._id,
+                    address: selectedAddress._id,
+                    paymentType,
+                    items: cartArray.map((item) => (
+                        {
+                            product: item._id,
+                            quantity: cartItems[item._id],
+                        }
+                    ))
+                })
+
+                console.log("data of order by stripe", data)
+
+                if (data.success) {
+                    window.location.replace(data.url)
+                } else {
+                    toast.error(data.message)
+                }
+            }
+
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
+
+
+
+
 
     useEffect(() => {
         calculateAmount()
@@ -221,7 +284,7 @@ const Cart = () => {
                                                             {
                                                                 addresses.map((address, i) => (
                                                                     <div className="flex flex-col space-y-2 text-sm md:text-base cursor-pointer hove:bg-gray-900"
-                                                                    onClick={()=> setSelectedAddress(address)}>
+                                                                        onClick={() => setSelectedAddress(address)}>
 
                                                                         <div className="flex gap-2 flex-wrap">
                                                                             <span>{address.street},</span>
@@ -253,9 +316,11 @@ const Cart = () => {
 
                     <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
 
-                    <select className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none">
-                        <option value="COD" onClick={() => setPaymentType("COD")}>Cash On Delivery</option>
-                        <option value="Online" onClick={() => setPaymentType("Online")}>Online Payment</option>
+                    <select className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none"
+                        value={paymentType}
+                        onChange={(e) => setPaymentType(e.target.value)}>
+                        <option value={"COD"} >Cash On Delivery</option>
+                        <option value={"Online"} >Online Payment</option>
                     </select>
                 </div>
 
@@ -276,7 +341,8 @@ const Cart = () => {
                     </p>
                 </div>
 
-                <button className="w-full py-3 mt-6 cursor-pointer bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition">
+                <button className="w-full py-3 mt-6 cursor-pointer bg-indigo-500 text-white font-medium hover:bg-indigo-600 transition"
+                    onClick={orderPlace}>
                     Place Order
                 </button>
             </div>
