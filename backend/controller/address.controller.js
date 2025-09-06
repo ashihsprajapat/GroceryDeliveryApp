@@ -13,10 +13,6 @@ export const addAddress = async (req, res) => {
         if (!userId)
             return res.json({ success: false, message: "userId is requiredx" })
 
-        // console.log("Address", address)
-
-        // console.log(req.user.email);
-
         address.email = req.user.email;
 
         address = await Address.create({ ...address, userId });
@@ -35,9 +31,7 @@ export const addAddress = async (req, res) => {
 export const getAddress = async (req, res) => {
     try {
         const { userId } = req
-
-        // console.log(userId)
-
+        
         const address = await Address.find({ userId });
 
         res.json({ success: true, address })

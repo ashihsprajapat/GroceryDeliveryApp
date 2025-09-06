@@ -45,14 +45,11 @@ export const placeOrderCOD = async (req, res) => {
 export const placeOrderStripe = async (req, res) => {
     try {
 
-        console.log("header in req ",req.headers)
-
         const { userId, items, address, } = req.body;
 
         const { origin } = req.headers;
 
 
-        // console.log(items, address, userId)
 
         if (items.length === 0 || !address) {
             return res.json({ success: false, message: "All Dtails are required" })

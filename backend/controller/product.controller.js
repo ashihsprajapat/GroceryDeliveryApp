@@ -7,12 +7,10 @@ import cloudinary from './../config/cloudinary.js';
 //Add product : api/product/add
 export const addProduct = async (req, res) => {
     try {
-        console.log("req.boady  =", req.body)
 
         let productData = JSON.parse(req.body.productData)
 
         const images = req.files;
-        console.log("images are", images)
 
         let imageUrl = []
         if (images && images.length > 0) {
@@ -23,7 +21,6 @@ export const addProduct = async (req, res) => {
             );
             imageUrl = uploadResults.map(result => result.secure_url);
         }
-        console.log("image urls arr", imageUrl)
         await Product.create({ ...productData, image: imageUrl });
 
         return res.json({ success: true, message: "product added" })
@@ -40,7 +37,6 @@ export const productList = async (req, res) => {
 
 
     try {
-       // console.log("req come for product list")
         const products = await Product.find({})
 
         return res.json({ success: true, products })

@@ -3,7 +3,6 @@ import { generateSellerToken } from "../utils/tokenGenerate.js";
 
 //login seller : /api/seller/login
 export const sellerLogin = async (req, res) => {
-    //console.log("req for seller login")
 
     try {
         const { email, password } = req.body;
