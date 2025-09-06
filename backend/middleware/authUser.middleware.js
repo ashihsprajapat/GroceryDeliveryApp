@@ -6,10 +6,10 @@ export const authUser = async (req, res, next) => {
     try {
         const { grocery_token } = req.cookies;
 
-        res.send({success: true, message: "grocery_token", grocery_token})
+
 
         if (!grocery_token)
-            return res.json({ success: false, message: "not Login" })
+            return res.json({ success: false, message: "not Login", grocery_token: grocery_token })
 
 
 
