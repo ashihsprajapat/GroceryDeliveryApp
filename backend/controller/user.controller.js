@@ -26,7 +26,7 @@ export const register = async (req, res) => {
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
             secure: process.env.MODE_DEV === "developement",  // use secire cookie in production
-            sameSite: process.env.MODE_DEV === "developement" ? 'none' : "strict",  //secur   CSRF protextion
+            sameSite: process.env.MODE_DEV === "developement" ? 'none' : 'lax',  //secur   CSRF protextion
             maxAge: 7 * 24 * 60 * 60 * 1000, //mili second cookie expiration time
         })
 
@@ -61,7 +61,7 @@ export const login = async (req, res) => {
             httpOnly: true,  //prevent javascript to access cookie
             secure: true ||  process.env.MODE_DEV === "developement",  // use secire cookie in production
             
-            sameSite: process.env.MODE_DEV === "developement" ? 'none' : "strict",  //secur   CSRF protextion
+            sameSite: process.env.MODE_DEV === "developement" ? 'none' : 'lax',  //secur   CSRF protextion
             maxAge: 7 * 24 * 60 * 60 * 1000, //mili second cookie expiration time
         })
 
