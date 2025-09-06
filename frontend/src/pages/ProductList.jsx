@@ -14,7 +14,6 @@ const ProductList = () => {
         try{
 
             const {data}= await axios.get("/api/product/list")
-            console.log(data);
 
             if(data.success){
                 setAllListings(data.products)
@@ -33,11 +32,8 @@ const ProductList = () => {
     },[])
 
     const stockChange=async(e, id)=>{
-        console.log(e.target.checked)
         try{
             const {data}= await axios.put("/api/product/stock",{id,inStock:e.target.checked})
-
-            console.log(data)
             if(data.message){
                 toast.success(data.message)
             }else{

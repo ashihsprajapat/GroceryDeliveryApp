@@ -29,7 +29,6 @@ function AddAddress() {
     //add Address
     const checkaddAddress = (e) => {
         e.preventDefault();
-        //  console.log(addressData)
         if (!addressData.firstName || !addressData.lastName || !addressData.email || !addressData.street || !addressData.city || !addressData.state || !addressData.zipcode || !addressData.country) {
             toast.error("Please fill all the fields");
             return;

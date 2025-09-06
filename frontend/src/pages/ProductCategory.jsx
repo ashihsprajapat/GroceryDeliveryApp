@@ -11,7 +11,6 @@ function ProductCategory() {
     const { category } = useParams();
 
     const searchCategory = categories.find((item) => (item.path.toLowerCase() === category));
-   // console.log(searchCategory)
 
     const filteredProduct = products.filter((product, i) => (product.category.toLowerCase() === category))
 

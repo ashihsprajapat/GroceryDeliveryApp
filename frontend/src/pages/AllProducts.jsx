@@ -7,9 +7,6 @@ function AllProducts() {
     const { products, navigate, searchQuery, setSearchQuery } = useAppContext();
     const [filterProduct, setFilterProduct] = useState([]);
 
-
-    // console.log( 'filter data is ',filterProduct)
-
     useEffect(() => {
 
         if (searchQuery.length > 0) {

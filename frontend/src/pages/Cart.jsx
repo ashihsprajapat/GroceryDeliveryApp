@@ -38,7 +38,6 @@ const Cart = () => {
             try {
                 setLoadingAddress(true)
                 const { data } = await axios.get("/api/address/get-address")
-                //  console.log("data of address of user", data)
                 if (data.success) {
                     setAddresses(data.address)
                     if (data.address.length > 1) {
@@ -58,29 +57,20 @@ const Cart = () => {
 
 
     const getCart = () => {
-        // console.log("trigger to getCart")
         let tempArray = [];
         for (const key of products) {
-            //  const matchedProduct = product.find((items, i) => items._id === key._id)
-            // if (!matchedProduct) continue;
-
-            // console.log("product are ", product)
-            // matchedProduct.quantity = cartItems[key];
-            // tempArray.push(matchedProduct);
 
             if (!Object.prototype.hasOwnProperty.call(cartItems, key._id))
                 continue;
             tempArray.push(key);
         }
         setCartArray(tempArray);
-        // console.log("temp array is", tempArray);
     }
 
 
     const getCartCount = () => { return 8 }
 
     const removeItmeFromCart = (productId) => {
-        console.log("remove from cart trigger")
         let cartDate = structuredClone(cartItems)
 
         delete cartDate[productId]
@@ -99,8 +89,6 @@ const Cart = () => {
         setAmount(totalAmount);
         setAccualAmount(toatlaccual)
     }
-
-    console.log("payment type is ", paymentType)
 
     //order place on cod
     //add orders post request

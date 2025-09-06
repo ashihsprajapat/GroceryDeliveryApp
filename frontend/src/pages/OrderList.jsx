@@ -11,8 +11,7 @@ const OrderList = () => {
     const getOrders = async () => {
         try {
 
-            const { data } = await axios.get("/api/order/user")
-            console.log("order placed by users", data);
+            const { data } = await axios.get("/api/order/seller")
 
             if (data.success) {
                 setOrders(data.orders)
@@ -21,7 +20,6 @@ const OrderList = () => {
             console.log(error)
         }
     }
-    console.log("orders are ", orders)
     useEffect(() => {
 
         getOrders()

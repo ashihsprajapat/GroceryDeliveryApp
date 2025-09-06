@@ -22,7 +22,6 @@ function ProductDetails() {
         try {
             setLoad(true);
             const { data } = await axios.get(`api/product/${id}`)
-            console.log(data)
             if (data.success) {
                 setProduct(data.product)
                 setThumbnail(data.product.image[0])
@@ -52,7 +51,6 @@ function ProductDetails() {
     }, [,])
 
     const sameProduct = () => {
-        // console.log("same product function trigger", products)
         let findRelatedProduc = products.find((items, _) => { items.category === product.category; console.log(items) })
         console.log("related products are", findRelatedProduc)
         setRelate(findRelatedProduc);

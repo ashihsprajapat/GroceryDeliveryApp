@@ -17,8 +17,6 @@ export const AppContextProvider = ({ children }) => {
     const currency = import.meta.VITE_CURRENCY;
 
     const [cartItems, setCartItems] = useState({
-        // "6847c0db325e42a6a078b7a3": 1,
-        // "6847c186325e42a6a078b7bb": 1
     });
 
     const navigate = useNavigate();
@@ -33,8 +31,6 @@ export const AppContextProvider = ({ children }) => {
 
     const [address, setAddress] = useState({})
     const [loadingAddress, setLoadingAddress] = useState();
-
-    // console.log("product in appcontezt", product)
 
     //fetch all products
     const fetchProducts = async () => {
@@ -52,15 +48,11 @@ export const AppContextProvider = ({ children }) => {
         } catch (e) {
 
         }
-
-        // 
-        // console.log(product)
     }
 
     //Add product to cart
     const addToCart = (itemId) => {
         let cartData = structuredClone(cartItems);  //Using structuredClone() in JavaScript is a way to deep copy an object. When you do this:
-        // console.log(cartData)
         if (cartData[itemId]) {
             cartData[itemId] += 1;
         } else {
@@ -88,8 +80,6 @@ export const AppContextProvider = ({ children }) => {
         try {
 
             const { data } = await axios.get("/api/seller/is-seller")
-
-
             if (data.success) {
                 setIsSeller(true);
 
@@ -109,7 +99,6 @@ export const AppContextProvider = ({ children }) => {
         try {
 
             const { data } = await axios.post("/api/user/is-auth")
-            console.log("data of checking user auth", data)
             if (data.success) {
                 setUser(data.user)
                 setCartItems(data.user.cartItems)
@@ -146,7 +135,6 @@ export const AppContextProvider = ({ children }) => {
         try {
 
             const { data } = await axios.post("/api/address/add-address", { address })
-            console.log("data of adding address ", data)
             if (data.success) {
                 setAddress(data.address)
                 toast.success(data.message)
@@ -171,21 +159,17 @@ export const AppContextProvider = ({ children }) => {
         fetchtSeller()
         fetchtUser()
     }, [products])
-    // console.log("all product in app context", product)
 
 
     //update database cartItmes
     useEffect(() => {
 
         const updateCart = async () => {
-            // console.log("update cart item in database")
             try {
 
                 const { data } = await axios.post("/api/cart/update", { cartItems })
 
-                // if (!data.success) {
-                //     toast.error(data.message)
-                // }
+               
 
             } catch (err) {
                 toast.error(err.message)
