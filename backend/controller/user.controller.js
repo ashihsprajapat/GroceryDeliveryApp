@@ -26,7 +26,7 @@ export const register = async (req, res) => {
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
             secure: process.env.MODE_DEV === "developement",  // use secire cookie in production
-            sameSite: process.env.MODE_DEV === "developement" ? 'none' : 'lax',  //secur   CSRF protextion
+            sameSite: process.env.MODE_DEV === "developement" ? 'strict' : 'none',  //secur   CSRF protextion
             maxAge: 7 * 24 * 60 * 60 * 1000, //mili second cookie expiration time
         })
 
@@ -47,7 +47,7 @@ export const login = async (req, res) => {
             return res.json({ success: false, message: "Missing details" })
 
         const user = await User.findOne({ email })
-        
+
         if (!user)
             return res.json({ success: false, message: "Email Not exist" })
 
@@ -59,9 +59,9 @@ export const login = async (req, res) => {
 
         res.cookie("grocery_token", token, {
             httpOnly: true,  //prevent javascript to access cookie
-            secure: true ||  process.env.MODE_DEV === "developement",  // use secire cookie in production
-            
-            sameSite: process.env.MODE_DEV === "developement" ? 'none' : 'lax',  //secur   CSRF protextion
+            secure: true || process.env.MODE_DEV === "developement",  // use secire cookie in production
+
+            sameSite: process.env.MODE_DEV === "developement" ? 'Strict' : 'none',  //secur   CSRF protextion
             maxAge: 7 * 24 * 60 * 60 * 1000, //mili second cookie expiration time
         })
 
@@ -78,9 +78,9 @@ export const login = async (req, res) => {
 export const isAuth = async (req, res) => {
     try {
         const { userId } = req;
-        
+
         const user = await User.findById(userId).select('-password')
-        
+
         if (!user)
             return res.json({ success: false, message: "Not authorize" })
 
