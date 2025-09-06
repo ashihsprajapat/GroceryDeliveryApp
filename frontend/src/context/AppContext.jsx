@@ -23,7 +23,6 @@ export const AppContextProvider = ({ children }) => {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const [email, setEmail] = useState(null);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
 
@@ -110,7 +109,7 @@ export const AppContextProvider = ({ children }) => {
         try {
 
             const { data } = await axios.post("/api/user/is-auth")
-
+            console.log("data of checking user auth", data)
             if (data.success) {
                 setUser(data.user)
                 setCartItems(data.user.cartItems)

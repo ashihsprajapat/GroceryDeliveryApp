@@ -6,8 +6,11 @@ export const authUser = async (req, res, next) => {
     try {
         const { grocery_token } = req.cookies;
 
+        res.send({success: true, message: "grocery_token", grocery_token})
+
         if (!grocery_token)
             return res.json({ success: false, message: "not Login" })
+
 
 
         const decode = jwt.verify(grocery_token, process.env.JWT_SECRET);
