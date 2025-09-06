@@ -249,7 +249,7 @@ const Cart = () => {
                                     <div className="flex flex-col">
                                         <div className="flex flex-col space-y-2 text-sm md:text-base">
 
-                                            <div className="flex gap-2 flex-wrap">
+                                            <div className="flex text-sm gap-2 flex-wrap">
                                                 <span>{selectedAddress.street},</span>
                                                 <span>{selectedAddress.city},</span>
                                                 <span>{selectedAddress.state},</span>
@@ -267,14 +267,15 @@ const Cart = () => {
                                             <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
                                                 <p onClick={() => setShowAddress(false)} className="text-gray-500 p-2 hover:bg-gray-100">
                                                     {addresses.length > 0 ? (
-                                                        <>
+                                                        <div>
 
                                                             {
                                                                 addresses.map((address, i) => (
                                                                     <div className="flex flex-col space-y-2 text-sm md:text-base cursor-pointer hove:bg-gray-900"
-                                                                        onClick={() => setSelectedAddress(address)}>
+                                                                        onClick={() => setSelectedAddress(address)}
+                                                                        key={i}>
 
-                                                                        <div className="flex gap-2 flex-wrap">
+                                                                        <div className="flex text-sm gap-2 flex-wrap">
                                                                             <span>{address.street},</span>
                                                                             <span>{address.city},</span>
                                                                             <span>{address.state},</span>
@@ -284,7 +285,7 @@ const Cart = () => {
                                                                         <hr />
                                                                     </div>
                                                                 ))}
-                                                        </>
+                                                        </div>
 
                                                     ) : "New York, USA"}
                                                 </p>

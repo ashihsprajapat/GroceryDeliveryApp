@@ -6,7 +6,7 @@ import { useAppContext } from '../context/AppContext';
 function Navbar() {
     const [open, setOpen] = React.useState(false)
 
-    const { axios,cartItems, user, setUser, searchQuery, setSearchQuery, navigate, showUserLogin, setShowUserLogin } = useAppContext();
+    const { axios, cartItems, user, setUser, searchQuery, setSearchQuery, navigate, showUserLogin, setShowUserLogin } = useAppContext();
 
     const logout = async () => {
         let { data } = await axios.get("/api/user/logout")
@@ -27,7 +27,7 @@ function Navbar() {
     }, [searchQuery])
 
     return (
-        <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+        <nav className="flex  items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
 
 
             <NavLink to="/" onClick={() => setOpen(false)} >
@@ -70,15 +70,15 @@ function Navbar() {
                 }
             </div>
 
-            <button onClick={() => open ? setOpen(false) : setOpen(true)} aria-label="Menu" className="sm:hidden">
+            <button onClick={() =>{ open ? setOpen(false) : setOpen(true); }} aria-label="Menu" className=" cursor-pointer sm:hidden">
                 {/* Menu Icon SVG */}
                 <img src={assets.menu_icon} className='w-8' alt="" />
             </button>
 
             {/* Mobile Menu */}
             {open &&
-                <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}>
-                    <NavLink onClick={() => setOpen(false)} to="/" className="block">Home</NavLink>
+                <div className={`${open ? 'flex' : 'hidden'} absolute top-[60px] left-0 w-full border-b-0 border-gray-600 bg-gray-200 shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden z-50`}>
+                <NavLink onClick={() => setOpen(false)} to="/" className="block">Home</NavLink>
                     <NavLink onClick={() => setOpen(false)} to="/products" className="block">All Product</NavLink>
 
                     {
