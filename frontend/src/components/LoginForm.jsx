@@ -2,7 +2,8 @@
 import React from "react";
 import { useAppContext } from "../context/AppContext";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
+import { useState } from "react";
 
 const LoginForm = () => {
     const [state, setState] = React.useState("login");
@@ -10,14 +11,16 @@ const LoginForm = () => {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
-    const { setShowUserLogin, user, setUser } = useAppContext();
+    const { setShowUserLogin, setUser } = useAppContext();
+
+    const [loading, setLoading] = useState(false);
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         // console.log(name, email, password);
 
         try {
-
+            setLoading(true)
             if (state == 'login') {
                 const { data } = await axios.post("/api/user/login", {
                     email, password
@@ -29,8 +32,8 @@ const LoginForm = () => {
                     setShowUserLogin(false)
                 } else {
                     toast.error(data.message)
-                    setPassword("")
                 }
+                setLoading(false)
 
             } else {
                 const { data } = await axios.post("/api/user/register", {
@@ -44,10 +47,11 @@ const LoginForm = () => {
                     toast.success(data.message)
                 } else {
                     toast.error(data.message)
-                    setPassword("")
                 }
+                setLoading(false)
             }
         } catch (err) {
+            console.log(err)
             setUser(null)
         }
         // setUser({
@@ -90,8 +94,16 @@ const LoginForm = () => {
                         Create an account? <span onClick={() => setState("register")} className="text-green-500 cursor-pointer">click here</span>
                     </p>
                 )}
-                <button className="bg-green-500 hover:bg-green-600 transition-all text-white w-full py-2 rounded-md cursor-pointer">
-                    {state === "register" ? "Create Account" : "Login"}
+                <button disabled={loading} className={`bg-green-500   gap-3 hover:bg-green-600 transition-all text-white w-full py-2 justify-center  rounded-md cursor-pointer ${loading && " items-center flex "}`}>
+                    {loading && <LoaderIcon className="w-24   " />}
+                    {
+                        loading ?
+                            "Loading...."
+                            :
+                            ( state === "register" ? "Create Account" : "Login")
+
+                    }
+
                 </button>
             </form>
         </div>
