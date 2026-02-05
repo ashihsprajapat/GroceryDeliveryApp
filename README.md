@@ -53,7 +53,39 @@ Built for speed, scalability, and a seamless shopping experience.
 - Razorpay API (Secure Payments)  
 - ClipDrop API (AI Background Removal)
 
----
+## 🔧 Frontend Environment Setup (Vite)
 
-## 🏗️ Project Structure
+Create a `.env` file inside the **frontend** folder.
+
+### 📄 `frontend/.env`
+
+```env
+VITE_CURRENCY=$
+VITE_BACKEND_URL=http://localhost:8088
+
+
+###🔧 Backend Environment Setup (Node.js)
+PORT=8088
+
+MONGO_URI=your_mongodb_connection_string
+
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+SELLER_EMAIL=your_seller_email
+SELLER_PASSWORD=your_seller_password
+
+JWT_SECRET=your_jwt_secret_key
+
+MODE_DEV=true
+PRODUCTION=false
+
+ALLOWEDORIGIN=http://localhost:5173
+
+STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
+
+
+
 
