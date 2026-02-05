@@ -2,18 +2,16 @@ import { useState } from "react";
 import { categories } from "../greencart_assets/assets";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
-import { fromJSON } from "postcss";
 
 const AddProduct = () => {
 
-    const { axios, navigate } = useAppContext()
+    const { axios } = useAppContext()
 
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("")
     const [price, setPrice] = useState("")
     const [offerPrice, setOfferPrice] = useState("")
-    const [images, setImages] = useState([])
     const [files, setFiles] = useState([])
 
     const handleAdd = async (e) => {
@@ -58,7 +56,7 @@ const AddProduct = () => {
             }
 
         } catch (err) {
-
+            err.message
         }
     }
 

@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage';
@@ -24,7 +22,7 @@ import MyOrders from './pages/MyOrders'
 
 function App() {
 
-  const { showUserLogin, setShowUserLogin, isSeller, navigate } = useAppContext();
+  const { showUserLogin, isSeller } = useAppContext();
 
 
   const isSallerpath = useLocation().pathname.includes("seller") //return true and false

@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
 const OrderList = () => {
-    const boxIcon = "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/e-commerce/boxIcon.svg"
-
+   
     const { axios } = useAppContext()
 
     const [orders, setOrders] = useState([]);

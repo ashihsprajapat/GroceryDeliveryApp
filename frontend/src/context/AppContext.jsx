@@ -46,7 +46,7 @@ export const AppContextProvider = ({ children }) => {
             }
 
         } catch (e) {
-
+            console.log("error", e.message)
         }
     }
 
@@ -87,7 +87,8 @@ export const AppContextProvider = ({ children }) => {
                 setIsSeller(false)
             }
 
-        } catch (err) {
+        } catch (e) {
+            console.log(e.message)
             setIsSeller(false)
         }
     }
@@ -108,6 +109,7 @@ export const AppContextProvider = ({ children }) => {
             }
 
         } catch (err) {
+            console.log(err.message)
             setUser(null)
         }
     }
@@ -181,7 +183,6 @@ export const AppContextProvider = ({ children }) => {
 
     }, [cartItems])
 
-    console.log("cart Items are ", cartItems)
 
     let value = {
         navigate,

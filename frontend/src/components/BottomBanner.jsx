@@ -18,7 +18,7 @@ function BottomBanner() {
 
                     {
                         features.map((featur, i) => (
-                            <div className='flex gap-4 item-center mt-2 ' >
+                            <div key={i} className='flex gap-4 item-center mt-2 ' >
                                 <img src={featur.icon} alt={featur.title} className='w-9 md:w-11' />
                                 <div className='' >
                                     <h4 className='text-lg md:text-xl font-semibold' >{featur.title}</h4>

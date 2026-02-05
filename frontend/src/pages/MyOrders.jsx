@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../context/AppContext'
 
 function MyOrders() {
-    const { user, axios, navigate } = useAppContext()
+    const { user, axios } = useAppContext()
 
     const [orders, setOrders] = useState([]);
 
