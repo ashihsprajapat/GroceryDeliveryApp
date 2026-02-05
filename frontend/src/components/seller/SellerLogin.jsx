@@ -13,7 +13,7 @@ function SellerLogin() {
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-        // setIsSeller(true);
+        
         setLoading(true);
         try {
 
@@ -21,7 +21,6 @@ function SellerLogin() {
             const { data } = await axios.post("/api/seller/login", {
                 email, password,
             })
-            console.log(data)
             if (data.success) {
                 setIsSeller(true);
                 toast.success(data.message)
@@ -32,7 +31,7 @@ function SellerLogin() {
             setLoading(false)
 
         } catch (err) {
-            console.log(err.message)
+            err.message
 
         }
     }
