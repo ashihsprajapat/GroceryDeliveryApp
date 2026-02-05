@@ -54,10 +54,6 @@ const LoginForm = () => {
             console.log(err)
             setUser(null)
         }
-        // setUser({
-        //     email, name
-        // })
-        // setShowUserLogin(false)
     }
 
     return (
@@ -94,11 +90,11 @@ const LoginForm = () => {
                         Create an account? <span onClick={() => setState("register")} className="text-green-500 cursor-pointer">click here</span>
                     </p>
                 )}
-                <button disabled={loading} className={`bg-green-500   gap-3 hover:bg-green-600 transition-all text-white w-full py-2 justify-center  rounded-md cursor-pointer ${loading && " items-center flex "}`}>
-                    {loading && <LoaderIcon className="w-24   " />}
+                <button disabled={loading} className={`bg-green-500   gap-3 hover:bg-green-600 transition-all text-white w-full py-2 justify-center h-10  rounded-md cursor-pointer ${loading && " items-center flex "}`}>
+                    {loading && <LoaderIcon className=" p-1 animate-spin    " />}
                     {
                         loading ?
-                            "Loading...."
+                            ""
                             :
                             ( state === "register" ? "Create Account" : "Login")
 

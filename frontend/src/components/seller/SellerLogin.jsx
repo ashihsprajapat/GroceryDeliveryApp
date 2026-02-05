@@ -66,11 +66,11 @@ function SellerLogin() {
                         Create an account? <span onClick={() => setState("register")} className="text-indigo-500 cursor-pointer">click here</span>
                     </p>
                 )}
-                <button disabled={loading} className={`bg-indigo-500 hover:bg-indigo-600 transition-all text-white w-full py-2 rounded-md cursor-pointer ${loading && ' items-center flex justify-center'} `}>
+                <button disabled={loading} className={`bg-indigo-500 hover:bg-indigo-600 transition-all text-white w-full py-2 rounded-md h-10 cursor-pointer ${loading && ' items-center flex justify-center'} `}>
                     {loading && <LoaderIcon className='w-5 ' />}
                     {
                         loading ?
-                            "Loging..."
+                            ""
                             : (
                                 state === "register" ? "Create Account" : "Login"
                             )
